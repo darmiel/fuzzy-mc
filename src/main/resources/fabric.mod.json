@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "fuzzy-commands",
+	"version": "${version}",
+	"name": "Fuzzy",
+	"description": "Don't waste time finding the right command!",
+	"authors": [
+		"d2aniel"
+	],
+	"contact": {
+		"homepage": "https://github.com/darmiel",
+		"sources": "https://github.com/darmiel/fuzzy-mc"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/fuzzy/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"io.d2a.fuzzy.Fuzzy"
+		],
+		"client": [
+			"io.d2a.fuzzy.FuzzyClient"
+		]
+	},
+	"mixins": [
+		"fuzzy.mixins.json",
+		{
+			"config": "fuzzy.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.24",
+		"minecraft": "~1.20.2",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
