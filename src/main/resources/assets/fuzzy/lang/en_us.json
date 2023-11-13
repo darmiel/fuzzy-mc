@@ -17,11 +17,15 @@
   "text.autoconfig.fuzzy.option.showScore.@Tooltip": "Displays the relevancy score of each result in fuzzy searches. The higher the number, the more closely the result matches your search query.",
   "text.autoconfig.fuzzy.option.enableShiftActions": "Enable Shift Actions",
   "text.autoconfig.fuzzy.option.enableShiftActions.@Tooltip": "Enables the ability to perform actions on the selected command by holding shift and pressing the corresponding key.",
+  "text.autoconfig.fuzzy.option.enableCommandBlockSync": "Enable Command Block Logging",
+  "text.autoconfig.fuzzy.option.enableCommandBlockSync.@Tooltip": "If enabled, logs the commands from command blocks when you update them.",
   "text.fuzzy.action.ClearEntriesShiftAction": "Remove Entry",
   "text.fuzzy.action.NextEntryShiftAction": "Next Entry",
   "text.fuzzy.action.PreviousEntryShiftAction": "Previous Entry",
+  "text.fuzzy.action.CopyClipboardShiftAction": "Copy to Clipboard",
   "text.fuzzy.key.enter": "Enter",
   "text.fuzzy.key.tab": "Tab",
   "text.fuzzy.action.execute": "Execute Command",
-  "text.fuzzy.action.suggest": "Suggest Command"
+  "text.fuzzy.action.suggest": "Suggest Command",
+  "text.fuzzy.messages.command-copied": "Copied: "
 }

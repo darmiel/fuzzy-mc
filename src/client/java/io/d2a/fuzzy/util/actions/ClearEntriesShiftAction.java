@@ -13,13 +13,10 @@ public class ClearEntriesShiftAction implements ShiftAction {
     }
 
     @Override
-    public void run(final FuzzyCommandScreen screen, final SearchTextFieldWidget widget) {
-        // get selected entry
-        final ResultEntry entry = screen.getResultListWidget().getSelectedOrNull();
-        if (entry != null) {
-            FuzzyClient.SENT_COMMANDS.remove(entry.toString());
-            screen.updateResults();
-        }
+    public boolean run(final ResultEntry entry, final FuzzyCommandScreen screen, final SearchTextFieldWidget widget) {
+        FuzzyClient.SENT_COMMANDS.remove(entry.getCommand());
+        screen.updateResults();
+        return true;
     }
 
 }

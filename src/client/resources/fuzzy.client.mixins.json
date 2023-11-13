@@ -3,6 +3,8 @@
   "package": "io.d2a.fuzzy.mixin.client",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "CommandBlockSyncMixin",
+    "CommandBlockSyncMixin$AbstractCommandBlockScreenAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

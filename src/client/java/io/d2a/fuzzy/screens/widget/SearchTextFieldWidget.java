@@ -35,7 +35,14 @@ public class SearchTextFieldWidget extends TextFieldWidget {
         if (FuzzyClient.getConfig().enableShiftActions() && (modifiers & GLFW.GLFW_MOD_SHIFT) == GLFW.GLFW_MOD_SHIFT) {
             final ShiftAction action = ShiftAction.fromKeyCode(chr);
             if (action != null) {
-                action.run(this.fuzzyCommandScreen, this);
+                // get selected entry
+                final ResultEntry entry = this.fuzzyCommandScreen.getResultListWidget().getSelectedOrNull();
+                if (entry != null) {
+                    if (!action.run(entry, this.fuzzyCommandScreen, this)) {
+                        // close screen
+                        this.fuzzyCommandScreen.close();
+                    }
+                }
                 return true;
             }
         }

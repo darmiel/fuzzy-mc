@@ -29,6 +29,9 @@ public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
     @ConfigEntry.Gui.Tooltip
     private boolean enableShiftActions = defaultFuzzyConfig.enableShiftActions();
 
+    @ConfigEntry.Gui.Tooltip
+    private boolean enableCommandBlockSync = defaultFuzzyConfig.enableCommandBlockSync();
+
     @Override
     public int fuzzySearchCutoff() {
         return this.fuzzySearchCutoff;
@@ -52,6 +55,11 @@ public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
     @Override
     public boolean enableShiftActions() {
         return this.enableShiftActions;
+    }
+
+    @Override
+    public boolean enableCommandBlockSync() {
+        return this.enableCommandBlockSync;
     }
 
 }

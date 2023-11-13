@@ -1,6 +1,7 @@
 package io.d2a.fuzzy.util.actions;
 
 import io.d2a.fuzzy.screens.FuzzyCommandScreen;
+import io.d2a.fuzzy.screens.widget.ResultEntry;
 import io.d2a.fuzzy.screens.widget.SearchTextFieldWidget;
 
 public interface ShiftAction {
@@ -8,7 +9,8 @@ public interface ShiftAction {
     ShiftAction[] SHIFT_ACTIONS = new ShiftAction[]{
             new NextEntryShiftAction(),
             new PreviousEntryShiftAction(),
-            new ClearEntriesShiftAction()
+            new ClearEntriesShiftAction(),
+            new CopyClipboardShiftAction(),
     };
 
     static ShiftAction fromKeyCode(final char keyCode) {
@@ -22,5 +24,6 @@ public interface ShiftAction {
 
     char key();
 
-    void run(final FuzzyCommandScreen screen, final SearchTextFieldWidget widget);
+    // return false to close screen
+    boolean run(final ResultEntry entry, final FuzzyCommandScreen screen, final SearchTextFieldWidget widget);
 }

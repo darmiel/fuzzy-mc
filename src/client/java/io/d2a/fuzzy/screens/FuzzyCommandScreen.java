@@ -6,6 +6,7 @@ import io.d2a.fuzzy.config.DefaultFuzzyConfig;
 import io.d2a.fuzzy.screens.widget.ResultEntry;
 import io.d2a.fuzzy.screens.widget.ResultListWidget;
 import io.d2a.fuzzy.screens.widget.SearchTextFieldWidget;
+import io.d2a.fuzzy.util.Command;
 import io.d2a.fuzzy.util.actions.ShiftAction;
 import io.d2a.fuzzy.util.text.ColoredText;
 import io.d2a.fuzzy.util.text.TextMerge;
@@ -236,13 +237,14 @@ public class FuzzyCommandScreen extends Screen {
             FuzzySearch.extractTop(
                             text,
                             FuzzyClient.SENT_COMMANDS,
+                            Command::getCommand,
                             FuzzyClient.getConfig().fuzzySearchLimit(),
                             FuzzyClient.getConfig().fuzzySearchCutoff()
                     )
                     .forEach(command ->
                             resultListWidget.children().add(new ResultEntry(
                                     super.textRenderer,
-                                    command.getString(),
+                                    command.getReferent(),
                                     command.getScore()
                             ))
                     );
@@ -274,8 +276,7 @@ public class FuzzyCommandScreen extends Screen {
 
     private void check(final BiConsumer<MinecraftClient, ResultEntry> entryConsumer, final boolean backToParent) {
         if (backToParent) {
-            //noinspection DataFlowIssue
-            super.client.setScreen(this.parent);
+            this.close();
         }
         final ResultEntry entry = this.resultListWidget.getSelectedOrNull();
         if (entry == null) {
@@ -291,13 +292,13 @@ public class FuzzyCommandScreen extends Screen {
         this.check((client, entry) ->
                 // we already checked if the player is null in the check function
                 Objects.requireNonNull(client.player).networkHandler.
-                        sendChatCommand(entry.toString().substring(1))
+                        sendChatCommand(Command.Type.COMMAND_BLOCK.transform(entry.toString()))
         );
     }
 
     public void suggest() {
         this.check((client, entry) -> {
-            final ChatScreen chatScreen = new ChatScreen(entry.toString());
+            final ChatScreen chatScreen = new ChatScreen(Command.Type.CHAT.transform(entry.toString()));
             client.setScreen(chatScreen);
         }, false);
     }
@@ -319,6 +320,11 @@ public class FuzzyCommandScreen extends Screen {
 
     public ResultListWidget getResultListWidget() {
         return resultListWidget;
+    }
+
+    public void close() {
+        //noinspection DataFlowIssue
+        super.client.setScreen(this.parent);
     }
 
 }

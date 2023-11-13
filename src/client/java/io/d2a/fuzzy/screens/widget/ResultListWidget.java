@@ -19,7 +19,6 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
     }
 
     public void selectNextEntryInDirection(final NavigationDirection direction) {
-        System.out.println("Select next in " + direction);
         final ResultEntry entry = this.getNeighboringEntry(direction);
         if (entry != null) {
             this.setSelected(entry);

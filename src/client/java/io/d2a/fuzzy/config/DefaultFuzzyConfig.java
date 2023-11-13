@@ -26,4 +26,10 @@ public class DefaultFuzzyConfig implements FuzzyConfig {
     public boolean enableShiftActions() {
         return true;
     }
+
+    @Override
+    public boolean enableCommandBlockSync() {
+        return true;
+    }
+
 }
