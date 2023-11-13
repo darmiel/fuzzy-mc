@@ -23,9 +23,12 @@
   "text.fuzzy.action.NextEntryShiftAction": "Next Entry",
   "text.fuzzy.action.PreviousEntryShiftAction": "Previous Entry",
   "text.fuzzy.action.CopyClipboardShiftAction": "Copy to Clipboard",
+  "text.fuzzy.action.GiveCommandBlockShiftAction": "Give Command Block",
   "text.fuzzy.key.enter": "Enter",
   "text.fuzzy.key.tab": "Tab",
   "text.fuzzy.action.execute": "Execute Command",
   "text.fuzzy.action.suggest": "Suggest Command",
-  "text.fuzzy.messages.command-copied": "Copied: "
+  "text.fuzzy.messages.command-copied": "Copied: ",
+  "text.fuzzy.error.not-creative": "You must be in creative mode to use this feature.",
+  "text.fuzzy.messages.command-block-given": "Command Block given."
 }

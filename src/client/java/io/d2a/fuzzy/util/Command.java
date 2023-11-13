@@ -8,12 +8,12 @@ public class Command {
 
     public enum Type {
         COMMAND_BLOCK(
-                "# ",
+                "@ ",
                 Color.YELLOW.getRGB(),
                 command -> command
         ),
         CHAT(
-                "> ",
+                "/ ",
                 Color.WHITE.getRGB(),
                 command -> "/" + command
         );

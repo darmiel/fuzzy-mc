@@ -11,6 +11,7 @@ public interface ShiftAction {
             new PreviousEntryShiftAction(),
             new ClearEntriesShiftAction(),
             new CopyClipboardShiftAction(),
+            new GiveCommandBlockShiftAction(),
     };
 
     static ShiftAction fromKeyCode(final char keyCode) {

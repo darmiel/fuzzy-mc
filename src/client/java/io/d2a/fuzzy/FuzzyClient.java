@@ -13,11 +13,16 @@ import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
+import java.awt.*;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class FuzzyClient implements ClientModInitializer {
 
@@ -72,6 +77,14 @@ public class FuzzyClient implements ClientModInitializer {
         // remove old command to move it to the top
         FuzzyClient.SENT_COMMANDS.remove(command);
         FuzzyClient.SENT_COMMANDS.add(command);
+    }
+
+    public static void sendMessage(final ClientPlayerEntity client, final Text... texts) {
+        MutableText prefix = Text.literal("[Fuzzy] ").styled(style -> style.withColor(Color.GRAY.getRGB()));
+        for (final Text text : texts) {
+            prefix = prefix.append(text);
+        }
+        client.sendMessage(prefix);
     }
 
 }

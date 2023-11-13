@@ -1,5 +1,6 @@
 package io.d2a.fuzzy.util.actions;
 
+import io.d2a.fuzzy.FuzzyClient;
 import io.d2a.fuzzy.screens.FuzzyCommandScreen;
 import io.d2a.fuzzy.screens.widget.ResultEntry;
 import io.d2a.fuzzy.screens.widget.SearchTextFieldWidget;
@@ -21,12 +22,11 @@ public class CopyClipboardShiftAction implements ShiftAction {
 
         client.keyboard.setClipboard(entry.getCommand().getType().transform(entry.getCommand().getCommand()));
         if (client.player != null) {
-            client.player.sendMessage(Text.literal("[Fuzzy] ")
-                    .styled(style -> style.withColor(Color.GRAY.getRGB()))
-                    .append(Text.translatable("text.fuzzy.messages.command-copied")
-                            .styled(style -> style.withColor(Color.WHITE.getRGB())))
-                    .append(Text.literal(entry.toString())
-                            .styled(style -> style.withColor(Color.YELLOW.getRGB()).withItalic(true)))
+            FuzzyClient.sendMessage(client.player,
+                    Text.translatable("text.fuzzy.messages.command-copied")
+                            .styled(style -> style.withColor(Color.WHITE.getRGB())),
+                    Text.literal(entry.toString())
+                            .styled(style -> style.withColor(Color.YELLOW.getRGB()).withItalic(true))
             );
         }
         return false;
