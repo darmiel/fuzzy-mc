@@ -26,6 +26,9 @@ public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
     @ConfigEntry.Gui.Tooltip
     private boolean showScore = defaultFuzzyConfig.showScore();
 
+    @ConfigEntry.Gui.Tooltip
+    private boolean enableShiftActions = defaultFuzzyConfig.enableShiftActions();
+
     @Override
     public int fuzzySearchCutoff() {
         return this.fuzzySearchCutoff;
@@ -44,6 +47,11 @@ public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
     @Override
     public boolean showScore() {
         return this.showScore;
+    }
+
+    @Override
+    public boolean enableShiftActions() {
+        return this.enableShiftActions;
     }
 
 }

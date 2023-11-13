@@ -5,6 +5,8 @@ import io.d2a.fuzzy.config.ClothFuzzyConfig;
 import io.d2a.fuzzy.config.DefaultFuzzyConfig;
 import io.d2a.fuzzy.screens.widget.ResultEntry;
 import io.d2a.fuzzy.screens.widget.ResultListWidget;
+import io.d2a.fuzzy.screens.widget.SearchTextFieldWidget;
+import io.d2a.fuzzy.util.actions.ShiftAction;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.fabricmc.api.EnvType;
@@ -14,16 +16,13 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.navigation.GuiNavigation;
 import net.minecraft.client.gui.navigation.GuiNavigationPath;
-import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,8 +42,9 @@ public class FuzzyCommandScreen extends Screen {
 
     private String previousSearch = null;
 
-    private TextFieldWidget searchFieldWidget;
-    private ResultListWidget listWidget;
+    private SearchTextFieldWidget searchFieldWidget;
+    private ResultListWidget resultListWidget;
+
 
     final int padding = 10;
     final int searchFieldHeight = 16;
@@ -63,57 +63,39 @@ public class FuzzyCommandScreen extends Screen {
         final int searchFieldY = resultBoxY + resultBoxHeight + padding;
 
         // search field widget
-        this.searchFieldWidget = new TextFieldWidget(
+        this.searchFieldWidget = new SearchTextFieldWidget(
+                this,
                 super.textRenderer,
                 searchFieldX,
                 searchFieldY,
                 resultBoxWidth,
                 searchFieldHeight,
                 Text.translatable("text.fuzzy.search")
-        ) {
-            @Override
-            public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-                // select command search result above
-                if (keyCode == GLFW.GLFW_KEY_UP) {
-                    listWidget.selectNextEntryInDirection(NavigationDirection.UP);
-                    return true;
-                }
-                // select command search result below
-                if (keyCode == GLFW.GLFW_KEY_DOWN) {
-                    listWidget.selectNextEntryInDirection(NavigationDirection.DOWN);
-                    return true;
-                }
-                // execute command
-                if (keyCode == GLFW.GLFW_KEY_ENTER) {
-                    execute();
-                    return true;
-                }
-                // suggest command
-                if (keyCode == GLFW.GLFW_KEY_TAB) {
-                    suggest();
-                    return true;
-                }
-                return super.keyPressed(keyCode, scanCode, modifiers);
-            }
-        };
+        );
         this.searchFieldWidget.setChangedListener(text -> this.search(text, false));
+        this.searchFieldWidget.setResultConsumer((result, entry) -> {
+            switch (result) {
+                case EXECUTE -> this.execute();
+                case SUGGEST -> this.suggest();
+            }
+        });
         this.focusOn(this.searchFieldWidget);
         super.addDrawableChild(this.searchFieldWidget);
 
         // command list widget
-        listWidget = new ResultListWidget(
+        resultListWidget = new ResultListWidget(
                 super.client,
                 resultBoxWidth,
                 resultBoxHeight,
                 resultBoxY,
                 resultBoxY + resultBoxHeight
         );
-        listWidget.setRenderBackground(false);
-        listWidget.setLeftPos(resultBoxX);
-        super.addDrawableChild(listWidget);
+        resultListWidget.setRenderBackground(false);
+        resultListWidget.setLeftPos(resultBoxX);
+        super.addDrawableChild(resultListWidget);
 
         // call search to initially fill all commands
-        this.search("", true);
+        this.updateResults();
 
         if (super.client == null) {
             return;
@@ -138,7 +120,7 @@ public class FuzzyCommandScreen extends Screen {
                 Text.translatable("text.fuzzy.button-clear"),
                 button -> {
                     FuzzyClient.SENT_COMMANDS.clear();
-                    super.client.setScreenAndRender(this);
+                    FuzzyCommandScreen.this.updateResults();
                 }
         ).build());
 
@@ -184,11 +166,44 @@ public class FuzzyCommandScreen extends Screen {
                 Color.BLACK.getRGB()
         );
 
+        if (FuzzyClient.getConfig().enableShiftActions() && this.searchFieldWidget.isShiftDown()) {
+            // display shift actions
+            int lastTextY = resultBoxY - padding;
+
+            for (final ShiftAction action : ShiftAction.SHIFT_ACTIONS) {
+                final Text keyText = Text.of("[" + action.key() + "]: ");
+                context.drawText(
+                        super.textRenderer,
+                        keyText,
+                        this.padding,
+                        lastTextY,
+                        Color.YELLOW.getRGB(),
+                        true
+                );
+
+                final Text description = Text.translatable("text.fuzzy.action." + action.getClass().getSimpleName());
+                context.drawText(
+                        super.textRenderer,
+                        description,
+                        this.padding + super.textRenderer.getWidth(keyText),
+                        lastTextY,
+                        Color.WHITE.getRGB(),
+                        true
+                );
+
+                lastTextY += super.textRenderer.fontHeight + 2;
+            }
+        }
+
         super.render(context, mouseX, mouseY, delta);
     }
 
+    public void updateResults() {
+        this.search(this.searchFieldWidget.getText(), true);
+    }
+
     private void search(final String text, final boolean force) {
-        if (this.listWidget == null) {
+        if (this.resultListWidget == null) {
             return;
         }
 
@@ -199,7 +214,7 @@ public class FuzzyCommandScreen extends Screen {
         this.previousSearch = text;
 
         // clear any remaining children
-        this.listWidget.children().clear();
+        this.resultListWidget.children().clear();
 
         // fuzzy search in commands
         if (text.length() > 0) {
@@ -210,7 +225,7 @@ public class FuzzyCommandScreen extends Screen {
                             FuzzyClient.getConfig().fuzzySearchCutoff()
                     )
                     .forEach(command ->
-                            listWidget.children().add(new ResultEntry(
+                            resultListWidget.children().add(new ResultEntry(
                                     super.textRenderer,
                                     command.getString(),
                                     command.getScore()
@@ -219,7 +234,7 @@ public class FuzzyCommandScreen extends Screen {
         } else {
             FuzzyClient.SENT_COMMANDS
                     .forEach(command ->
-                            listWidget.children().add(0, new ResultEntry(
+                            resultListWidget.children().add(0, new ResultEntry(
                                     super.textRenderer,
                                     command,
                                     -1
@@ -228,14 +243,14 @@ public class FuzzyCommandScreen extends Screen {
         }
 
         // select first children
-        if (listWidget.children().size() > 0) {
-            listWidget.setSelected(listWidget.children().get(0));
+        if (resultListWidget.children().size() > 0) {
+            resultListWidget.setSelected(resultListWidget.children().get(0));
         } else {
-            listWidget.setSelected(null);
+            resultListWidget.setSelected(null);
         }
 
         // reset scroll position
-        listWidget.setScrollAmount(0);
+        resultListWidget.setScrollAmount(0);
     }
 
     private void check(final BiConsumer<MinecraftClient, ResultEntry> entryConsumer) {
@@ -247,7 +262,7 @@ public class FuzzyCommandScreen extends Screen {
             //noinspection DataFlowIssue
             super.client.setScreen(this.parent);
         }
-        final ResultEntry entry = this.listWidget.getSelectedOrNull();
+        final ResultEntry entry = this.resultListWidget.getSelectedOrNull();
         if (entry == null) {
             return;
         }
@@ -286,4 +301,9 @@ public class FuzzyCommandScreen extends Screen {
         }
         super.setFocused(focused);
     }
+
+    public ResultListWidget getResultListWidget() {
+        return resultListWidget;
+    }
+
 }

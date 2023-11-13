@@ -7,4 +7,6 @@ public interface FuzzyConfig {
     boolean clearOnJoin();
     boolean showScore();
 
+    boolean enableShiftActions();
+
 }

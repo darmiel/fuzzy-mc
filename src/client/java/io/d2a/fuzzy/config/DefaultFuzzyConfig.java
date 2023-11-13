@@ -22,4 +22,8 @@ public class DefaultFuzzyConfig implements FuzzyConfig {
         return true;
     }
 
+    @Override
+    public boolean enableShiftActions() {
+        return true;
+    }
 }
