@@ -6,11 +6,13 @@ import io.d2a.fuzzy.screens.widget.ResultListWidget;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.navigation.GuiNavigation;
 import net.minecraft.client.gui.navigation.GuiNavigationPath;
 import net.minecraft.client.gui.navigation.NavigationDirection;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
@@ -18,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
+import java.util.Objects;
+import java.util.function.BiConsumer;
 
 @Environment(EnvType.CLIENT)
 public class FuzzyCommandScreen extends Screen {
@@ -25,7 +29,9 @@ public class FuzzyCommandScreen extends Screen {
     private final Screen parent;
 
     public FuzzyCommandScreen(final Screen parent) {
-        super(Text.literal("Fuzzy Command Search"));
+        super(
+                Text.translatable("text.fuzzy.command-screen-title")
+        );
         this.parent = parent;
     }
 
@@ -57,23 +63,28 @@ public class FuzzyCommandScreen extends Screen {
                 searchFieldY,
                 resultBoxWidth,
                 searchFieldHeight,
-                Text.of("Search...")
+                Text.translatable("text.fuzzy.search")
         ) {
             @Override
             public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
                 // select command search result above
                 if (keyCode == GLFW.GLFW_KEY_UP) {
-                    listWidget.selectDirection(NavigationDirection.UP);
+                    listWidget.selectNextEntryInDirection(NavigationDirection.UP);
                     return true;
                 }
                 // select command search result below
                 if (keyCode == GLFW.GLFW_KEY_DOWN) {
-                    listWidget.selectDirection(NavigationDirection.DOWN);
+                    listWidget.selectNextEntryInDirection(NavigationDirection.DOWN);
                     return true;
                 }
                 // execute command
                 if (keyCode == GLFW.GLFW_KEY_ENTER) {
                     execute();
+                    return true;
+                }
+                // suggest command
+                if (keyCode == GLFW.GLFW_KEY_TAB) {
+                    suggest();
                     return true;
                 }
                 return super.keyPressed(keyCode, scanCode, modifiers);
@@ -167,10 +178,15 @@ public class FuzzyCommandScreen extends Screen {
         listWidget.setScrollAmount(0);
     }
 
-    public void execute() {
-        //noinspection DataFlowIssue
-        super.client.setScreen(this.parent);
+    private void check(final BiConsumer<MinecraftClient, ResultEntry> entryConsumer) {
+        this.check(entryConsumer, true);
+    }
 
+    private void check(final BiConsumer<MinecraftClient, ResultEntry> entryConsumer, final boolean backToParent) {
+        if (backToParent) {
+            //noinspection DataFlowIssue
+            super.client.setScreen(this.parent);
+        }
         final ResultEntry entry = this.listWidget.getSelectedOrNull();
         if (entry == null) {
             return;
@@ -178,7 +194,22 @@ public class FuzzyCommandScreen extends Screen {
         if (super.client == null || super.client.player == null) {
             return;
         }
-        super.client.player.networkHandler.sendChatCommand(entry.toString().substring(1));
+        entryConsumer.accept(super.client, entry);
+    }
+
+    public void execute() {
+        this.check((client, entry) ->
+                // we already checked if the player is null in the check function
+                Objects.requireNonNull(client.player).networkHandler.
+                        sendChatCommand(entry.toString().substring(1))
+        );
+    }
+
+    public void suggest() {
+        this.check((client, entry) -> {
+            final ChatScreen chatScreen = new ChatScreen(entry.toString());
+            client.setScreen(chatScreen);
+        }, false);
     }
 
     @Nullable

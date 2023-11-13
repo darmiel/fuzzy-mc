@@ -1,4 +1,7 @@
 {
   "key.fuzzy.open": "Open Command Finder",
-  "category.fuzzy.menu": "Fuzzy"
+  "category.fuzzy.menu": "Fuzzy",
+  "text.fuzzy.no-commands-found": "No commands found.",
+  "text.fuzzy.search": "Search...",
+  "text.fuzzy.command-screen-title": "Fuzzy Command Search"
 }

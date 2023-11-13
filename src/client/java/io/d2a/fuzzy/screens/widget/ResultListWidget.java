@@ -1,8 +1,12 @@
 package io.d2a.fuzzy.screens.widget;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
+import net.minecraft.text.Text;
+
+import java.awt.*;
 
 public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry> {
 
@@ -14,16 +18,29 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
         super(minecraftClient, width, height, top, bottom, 15);
     }
 
-    public void selectDirection(final NavigationDirection direction) {
+    public void selectNextEntryInDirection(final NavigationDirection direction) {
         final ResultEntry entry = this.getNeighboringEntry(direction);
-        System.out.println("Entry in pos: " + direction + " = " + entry);
         if (entry != null) {
             this.setSelected(entry);
         }
     }
 
-    public void execute() {
-
+    @Override
+    public void render(final DrawContext context, final int mouseX, final int mouseY, final float delta) {
+        // display "no previous commands found"
+        if (this.children().size() == 0) {
+            final Text text = Text.translatable("text.fuzzy.no-commands-found");
+            context.drawText(
+                    this.client.textRenderer,
+                    text,
+                    this.left + this.width / 2 - this.client.textRenderer.getWidth(text) / 2,
+                    this.top + this.height / 2 - 5,
+                    Color.PINK.getRGB(),
+                    true
+            );
+            return;
+        }
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
