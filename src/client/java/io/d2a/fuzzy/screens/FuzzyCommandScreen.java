@@ -1,8 +1,11 @@
 package io.d2a.fuzzy.screens;
 
 import io.d2a.fuzzy.FuzzyClient;
+import io.d2a.fuzzy.config.ClothFuzzyConfig;
+import io.d2a.fuzzy.config.DefaultFuzzyConfig;
 import io.d2a.fuzzy.screens.widget.ResultEntry;
 import io.d2a.fuzzy.screens.widget.ResultListWidget;
+import me.shedaniel.autoconfig.AutoConfig;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -14,12 +17,15 @@ import net.minecraft.client.gui.navigation.GuiNavigationPath;
 import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
-import java.awt.*;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
@@ -108,6 +114,55 @@ public class FuzzyCommandScreen extends Screen {
 
         // call search to initially fill all commands
         this.search("", true);
+
+        if (super.client == null) {
+            return;
+        }
+
+        // open configuration button
+        final List<ButtonWidget> buttons = new ArrayList<>();
+        if (!(FuzzyClient.getConfig() instanceof DefaultFuzzyConfig)) {
+            buttons.add(ButtonWidget.builder(
+                            Text.translatable("text.fuzzy.button-config"), button -> {
+                                final Screen configScreen = AutoConfig.getConfigScreen(
+                                        ClothFuzzyConfig.class,
+                                        super.client.currentScreen
+                                ).get();
+                                super.client.setScreen(configScreen);
+                            })
+                    .build());
+        }
+
+        // clear recent commands button
+        buttons.add(ButtonWidget.builder(
+                Text.translatable("text.fuzzy.button-clear"),
+                button -> {
+                    FuzzyClient.SENT_COMMANDS.clear();
+                    super.client.setScreenAndRender(this);
+                }
+        ).build());
+
+        // find button with max. length
+        int buttonMaxWidth = 0;
+        for (final ButtonWidget button : buttons) {
+            final int buttonMessageLength = super.client.textRenderer.getWidth(button.getMessage());
+            if (buttonMessageLength > buttonMaxWidth) {
+                buttonMaxWidth = buttonMessageLength;
+            }
+        }
+
+        // add button/s
+        final int buttonPadding = 10;
+
+        int lastButtonY = resultBoxY - padding;
+        for (final ButtonWidget button : buttons) {
+            button.setY(lastButtonY);
+            button.setX(resultBoxX + resultBoxWidth + 2 * this.padding);
+            button.setWidth(buttonMaxWidth + 10);
+
+            lastButtonY += button.getHeight() + buttonPadding;
+            this.addDrawableChild(button);
+        }
     }
 
     @Override

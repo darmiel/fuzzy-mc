@@ -7,7 +7,10 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry;
 @Config(name = "fuzzy")
 public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
 
+    @ConfigEntry.Gui.Excluded
     private static final DefaultFuzzyConfig defaultFuzzyConfig = new DefaultFuzzyConfig();
+
+    ///
 
     @ConfigEntry.Gui.Tooltip
     @ConfigEntry.BoundedDiscrete(min = 0, max = 100)

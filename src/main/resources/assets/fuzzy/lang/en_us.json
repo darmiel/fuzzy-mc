@@ -4,6 +4,8 @@
   "text.fuzzy.no-commands-found": "No commands found.",
   "text.fuzzy.search": "Search...",
   "text.fuzzy.command-screen-title": "Fuzzy Command Search",
+  "text.fuzzy.button-config": "Config",
+  "text.fuzzy.button-clear": "Clear",
   "text.autoconfig.fuzzy.title": "Fuzzy Configuration",
   "text.autoconfig.fuzzy.option.fuzzySearchCutoff": "Fuzzy Search Cutoff",
   "text.autoconfig.fuzzy.option.fuzzySearchCutoff.@Tooltip": "Only shows fuzzy search results with a score higher than or equal to the set threshold, indicating a close match to the search term.",
