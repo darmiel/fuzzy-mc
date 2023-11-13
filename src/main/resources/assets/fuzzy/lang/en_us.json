@@ -3,5 +3,14 @@
   "category.fuzzy.menu": "Fuzzy",
   "text.fuzzy.no-commands-found": "No commands found.",
   "text.fuzzy.search": "Search...",
-  "text.fuzzy.command-screen-title": "Fuzzy Command Search"
+  "text.fuzzy.command-screen-title": "Fuzzy Command Search",
+  "text.autoconfig.fuzzy.title": "Fuzzy Configuration",
+  "text.autoconfig.fuzzy.option.fuzzySearchCutoff": "Fuzzy Search Cutoff",
+  "text.autoconfig.fuzzy.option.fuzzySearchCutoff.@Tooltip": "Only shows fuzzy search results with a score higher than or equal to the set threshold, indicating a close match to the search term.",
+  "text.autoconfig.fuzzy.option.fuzzySearchLimit": "Fuzzy Search Limit",
+  "text.autoconfig.fuzzy.option.fuzzySearchLimit.@Tooltip": "Defines the maximum number of results returned from a fuzzy search.",
+  "text.autoconfig.fuzzy.option.clearOnJoin": "Clear Commands on Join",
+  "text.autoconfig.fuzzy.option.clearOnJoin.@Tooltip": "Automatically clears previous commands when switching the server.",
+  "text.autoconfig.fuzzy.option.showScore": "Show Fuzzy Search Score",
+  "text.autoconfig.fuzzy.option.showScore.@Tooltip": "Displays the relevancy score of each result in fuzzy searches. The higher the number, the more closely the result matches your search query."
 }

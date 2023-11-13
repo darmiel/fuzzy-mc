@@ -148,7 +148,12 @@ public class FuzzyCommandScreen extends Screen {
 
         // fuzzy search in commands
         if (text.length() > 0) {
-            FuzzySearch.extractTop(text, FuzzyClient.SENT_COMMANDS, 100)
+            FuzzySearch.extractTop(
+                            text,
+                            FuzzyClient.SENT_COMMANDS,
+                            FuzzyClient.getConfig().fuzzySearchLimit(),
+                            FuzzyClient.getConfig().fuzzySearchCutoff()
+                    )
                     .forEach(command ->
                             listWidget.children().add(new ResultEntry(
                                     super.textRenderer,

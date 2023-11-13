@@ -20,6 +20,9 @@
 		],
 		"client": [
 			"io.d2a.fuzzy.FuzzyClient"
+		],
+		"modmenu": [
+			"io.d2a.fuzzy.config.ModMenuConfigIntegration"
 		]
 	},
 	"mixins": [

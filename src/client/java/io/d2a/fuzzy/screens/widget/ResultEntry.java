@@ -1,5 +1,6 @@
 package io.d2a.fuzzy.screens.widget;
 
+import io.d2a.fuzzy.FuzzyClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
@@ -61,7 +62,7 @@ public class ResultEntry extends AlwaysSelectedEntryListWidget.Entry<ResultEntry
                 true
         );
 
-        if (this.score > 10) {
+        if (FuzzyClient.getConfig().showScore() && this.score > 10) {
             context.drawText(
                     this.textRenderer,
                     score,
