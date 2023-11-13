@@ -15,6 +15,8 @@
   "text.autoconfig.fuzzy.option.clearOnJoin.@Tooltip": "Automatically clears previous commands when switching the server.",
   "text.autoconfig.fuzzy.option.showScore": "Show Fuzzy Search Score",
   "text.autoconfig.fuzzy.option.showScore.@Tooltip": "Displays the relevancy score of each result in fuzzy searches. The higher the number, the more closely the result matches your search query.",
+  "text.autoconfig.fuzzy.option.enableShiftActions": "Enable Shift Actions",
+  "text.autoconfig.fuzzy.option.enableShiftActions.@Tooltip": "Enables the ability to perform actions on the selected command by holding shift and pressing the corresponding key.",
   "text.fuzzy.action.ClearEntriesShiftAction": "Remove Entry",
   "text.fuzzy.action.NextEntryShiftAction": "Next Entry",
   "text.fuzzy.action.PreviousEntryShiftAction": "Previous Entry"
