@@ -40,6 +40,7 @@ When you interact with a command block and change its command, if you have the`E
 Command Block commands appear in yellow and they have a `@` prefix in the command search.
 
 **TIP:** Use command block logging in combination with `Shift + B` to quickly swap between command blocks:
+
 https://github.com/darmiel/fuzzy-mc/assets/71837281/e6fe10b2-d4d3-473e-88a1-c7f2c10b8897
 
 
