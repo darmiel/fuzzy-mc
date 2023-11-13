@@ -7,6 +7,8 @@ import io.d2a.fuzzy.screens.widget.ResultEntry;
 import io.d2a.fuzzy.screens.widget.ResultListWidget;
 import io.d2a.fuzzy.screens.widget.SearchTextFieldWidget;
 import io.d2a.fuzzy.util.actions.ShiftAction;
+import io.d2a.fuzzy.util.text.ColoredText;
+import io.d2a.fuzzy.util.text.TextMerge;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.fabricmc.api.EnvType;
@@ -164,6 +166,19 @@ public class FuzzyCommandScreen extends Screen {
                 resultBoxX + resultBoxWidth + padding,
                 searchFieldY + searchFieldHeight + padding,
                 Color.BLACK.getRGB()
+        );
+
+        TextMerge.of(
+                ColoredText.ofString("[", Color.GRAY),
+                ColoredText.ofTranslatable("text.fuzzy.key.enter", Color.RED),
+                ColoredText.ofString("]: ", Color.GRAY),
+                ColoredText.ofTranslatable("text.fuzzy.action.execute", Color.LIGHT_GRAY),
+                ColoredText.ofString(" | [", Color.GRAY),
+                ColoredText.ofTranslatable("text.fuzzy.key.tab", Color.RED),
+                ColoredText.ofString("]: ", Color.GRAY),
+                ColoredText.ofTranslatable("text.fuzzy.action.suggest", Color.LIGHT_GRAY)
+        ).drawCentered(
+                super.textRenderer, context, super.width / 2, searchFieldY + searchFieldHeight + 2 * padding
         );
 
         if (FuzzyClient.getConfig().enableShiftActions() && this.searchFieldWidget.isShiftDown()) {

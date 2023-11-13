@@ -19,5 +19,9 @@
   "text.autoconfig.fuzzy.option.enableShiftActions.@Tooltip": "Enables the ability to perform actions on the selected command by holding shift and pressing the corresponding key.",
   "text.fuzzy.action.ClearEntriesShiftAction": "Remove Entry",
   "text.fuzzy.action.NextEntryShiftAction": "Next Entry",
-  "text.fuzzy.action.PreviousEntryShiftAction": "Previous Entry"
+  "text.fuzzy.action.PreviousEntryShiftAction": "Previous Entry",
+  "text.fuzzy.key.enter": "Enter",
+  "text.fuzzy.key.tab": "Tab",
+  "text.fuzzy.action.execute": "Execute Command",
+  "text.fuzzy.action.suggest": "Suggest Command"
 }
