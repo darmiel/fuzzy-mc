@@ -23,12 +23,12 @@ public class ResultEntry extends AlwaysSelectedEntryListWidget.Entry<ResultEntry
 
     @Override
     public String toString() {
-        return this.command.getCommand();
+        return this.command.command();
     }
 
     @Override
     public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        final String commandPrefix = this.command.getType().getPrefix();
+        final String commandPrefix = this.command.type().getPrefix();
         final int commandPrefixWidth = this.textRenderer.getWidth(commandPrefix);
         context.drawText(this.textRenderer, commandPrefix, x, y + 1, Color.GRAY.getRGB(), false);
 
@@ -46,7 +46,7 @@ public class ResultEntry extends AlwaysSelectedEntryListWidget.Entry<ResultEntry
         // build command preview
         final int maxCommandPreviewLength = entryWidth - 1 - commandPrefixWidth - 1 - scoreWidth;
         boolean truncated = false;
-        String commandPreview = this.command.getCommand();
+        String commandPreview = this.command.command();
         while (this.textRenderer.getWidth(commandPreview) > maxCommandPreviewLength) {
             commandPreview = commandPreview.substring(0, commandPreview.length() - 1);
             truncated = true;
@@ -59,7 +59,7 @@ public class ResultEntry extends AlwaysSelectedEntryListWidget.Entry<ResultEntry
                 commandPreview,
                 x + commandPrefixWidth,
                 y + 1,
-                this.command.getType().getRgb(),
+                this.command.type().getRgb(),
                 true
         );
 
@@ -77,7 +77,7 @@ public class ResultEntry extends AlwaysSelectedEntryListWidget.Entry<ResultEntry
 
     @Override
     public Text getNarration() {
-        return Text.of(this.command.getCommand());
+        return Text.of(this.command.command());
     }
 
     public Command getCommand() {

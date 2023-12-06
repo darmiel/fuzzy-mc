@@ -46,7 +46,7 @@ public class GiveCommandBlockShiftAction implements ShiftAction {
         // build command block item stack
         final ItemStack stack = new ItemStack(Blocks.COMMAND_BLOCK, 1);
         final NbtCompound compound = new NbtCompound();
-        compound.putString("Command", Command.Type.COMMAND_BLOCK.transform(entry.getCommand().getCommand()));
+        compound.putString("Command", Command.Type.COMMAND_BLOCK.transform(entry.getCommand().command()));
         NbtCompound blockEntityTag = new NbtCompound();
         blockEntityTag.put("BlockEntityTag", compound);
         stack.setNbt(blockEntityTag);

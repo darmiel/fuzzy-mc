@@ -237,7 +237,7 @@ public class FuzzyCommandScreen extends Screen {
             FuzzySearch.extractTop(
                             text,
                             FuzzyClient.SENT_COMMANDS,
-                            Command::getCommand,
+                            Command::command,
                             FuzzyClient.getConfig().fuzzySearchLimit(),
                             FuzzyClient.getConfig().fuzzySearchCutoff()
                     )

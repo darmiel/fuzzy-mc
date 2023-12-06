@@ -37,4 +37,9 @@ public class DefaultFuzzyConfig implements FuzzyConfig {
         return "";
     }
 
+    @Override
+    public boolean loadCommandHistory() {
+        return false;
+    }
+
 }
