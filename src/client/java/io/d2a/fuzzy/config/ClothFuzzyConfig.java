@@ -32,6 +32,9 @@ public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
     @ConfigEntry.Gui.Tooltip
     private boolean enableCommandBlockSync = defaultFuzzyConfig.enableCommandBlockSync();
 
+    @ConfigEntry.Gui.Tooltip
+    private String ignoredCommandPrefixes = defaultFuzzyConfig.ignoredCommandPrefixes();
+
     @Override
     public int fuzzySearchCutoff() {
         return this.fuzzySearchCutoff;
@@ -60,6 +63,11 @@ public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
     @Override
     public boolean enableCommandBlockSync() {
         return this.enableCommandBlockSync;
+    }
+
+    @Override
+    public String ignoredCommandPrefixes() {
+        return this.ignoredCommandPrefixes;
     }
 
 }

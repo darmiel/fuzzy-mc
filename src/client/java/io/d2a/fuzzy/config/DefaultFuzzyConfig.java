@@ -32,4 +32,9 @@ public class DefaultFuzzyConfig implements FuzzyConfig {
         return true;
     }
 
+    @Override
+    public String ignoredCommandPrefixes() {
+        return "";
+    }
+
 }

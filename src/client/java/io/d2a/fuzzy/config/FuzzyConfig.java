@@ -14,4 +14,6 @@ public interface FuzzyConfig {
 
     boolean enableCommandBlockSync();
 
+    String ignoredCommandPrefixes();
+
 }

@@ -23,6 +23,7 @@ import org.lwjgl.glfw.GLFW;
 import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class FuzzyClient implements ClientModInitializer {
 
@@ -59,7 +60,9 @@ public class FuzzyClient implements ClientModInitializer {
             }
         });
 
-        ClientSendMessageEvents.COMMAND.register(command -> FuzzyClient.addCommand(Command.Type.CHAT, command));
+        ClientSendMessageEvents.COMMAND.register(command -> {
+            FuzzyClient.addCommand(Command.Type.CHAT, command);
+        });
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             if (FuzzyClient.getConfig().clearOnJoin()) {
@@ -73,6 +76,15 @@ public class FuzzyClient implements ClientModInitializer {
     }
 
     public static void addCommand(final Command.Type type, final String commandText) {
+        // ignore commands with ignored prefixes
+        final String commandCompare = commandText.toLowerCase().trim();
+        if (FuzzyClient.getConfig().ignoredCommandPrefixes() != null &&
+                FuzzyClient.getConfig().ignoredCommandPrefixes().length() > 0 &&
+                Stream.of(FuzzyClient.getConfig().ignoredCommandPrefixes().split(","))
+                        .map(String::toLowerCase)
+                        .anyMatch(commandCompare::startsWith)) {
+            return;
+        }
         final Command command = new Command(type, commandText);
         // remove old command to move it to the top
         FuzzyClient.SENT_COMMANDS.remove(command);
