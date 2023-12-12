@@ -20,7 +20,7 @@ public class CopyClipboardShiftAction implements ShiftAction {
     public boolean run(final ResultEntry entry, final FuzzyCommandScreen screen, final SearchTextFieldWidget widget) {
         final MinecraftClient client = MinecraftClient.getInstance();
 
-        client.keyboard.setClipboard(entry.getCommand().getType().transform(entry.getCommand().getCommand()));
+        client.keyboard.setClipboard(entry.getCommand().type().transform(entry.getCommand().command()));
         if (client.player != null) {
             FuzzyClient.sendMessage(client.player,
                     Text.translatable("text.fuzzy.messages.command-copied")

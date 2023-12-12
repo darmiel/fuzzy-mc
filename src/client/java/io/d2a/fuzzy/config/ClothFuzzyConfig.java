@@ -35,6 +35,9 @@ public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
     @ConfigEntry.Gui.Tooltip
     private String ignoredCommandPrefixes = defaultFuzzyConfig.ignoredCommandPrefixes();
 
+    @ConfigEntry.Gui.Tooltip
+    private boolean loadCommandHistory = defaultFuzzyConfig.loadCommandHistory();
+
     @Override
     public int fuzzySearchCutoff() {
         return this.fuzzySearchCutoff;
@@ -68,6 +71,11 @@ public class ClothFuzzyConfig implements ConfigData, FuzzyConfig {
     @Override
     public String ignoredCommandPrefixes() {
         return this.ignoredCommandPrefixes;
+    }
+
+    @Override
+    public boolean loadCommandHistory() {
+        return this.loadCommandHistory;
     }
 
 }

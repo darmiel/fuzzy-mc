@@ -8,6 +8,7 @@ import io.d2a.fuzzy.util.Command;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.message.v1.ClientSendMessageEvents;
@@ -15,6 +16,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.CommandHistoryManager;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -67,6 +69,17 @@ public class FuzzyClient implements ClientModInitializer {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             if (FuzzyClient.getConfig().clearOnJoin()) {
                 FuzzyClient.SENT_COMMANDS.clear();
+            }
+        });
+
+        ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
+            final CommandHistoryManager commandHistoryManager = client.getCommandHistoryManager();
+            if (FuzzyClient.getConfig().loadCommandHistory() && commandHistoryManager != null) {
+                System.out.println("Loading command history from command_history.txt...");
+                commandHistoryManager.getHistory().forEach(command -> FuzzyClient.addCommand(
+                        Command.Type.HISTORY,
+                        command.substring(1) // remove '/' prefix
+                ));
             }
         });
     }
