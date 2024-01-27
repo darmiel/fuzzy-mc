@@ -16,6 +16,4 @@ public interface FuzzyConfig {
 
     String ignoredCommandPrefixes();
 
-    boolean loadCommandHistory();
-
 }

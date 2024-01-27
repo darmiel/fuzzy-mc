@@ -16,11 +16,6 @@ public record Command(Type type, String command) {
                 "/ ",
                 Color.WHITE.getRGB(),
                 command -> "/" + command
-        ),
-        HISTORY(
-                "* ",
-                Color.GRAY.getRGB(),
-                command -> "/" + command
         );
 
         private final int rgb;

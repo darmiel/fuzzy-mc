@@ -3,8 +3,8 @@ package io.d2a.fuzzy.screens.widget;
 import io.d2a.fuzzy.FuzzyClient;
 import io.d2a.fuzzy.util.Command;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -27,10 +27,10 @@ public class ResultEntry extends AlwaysSelectedEntryListWidget.Entry<ResultEntry
     }
 
     @Override
-    public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
+    public void render(MatrixStack matrices, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
         final String commandPrefix = this.command.type().getPrefix();
         final int commandPrefixWidth = this.textRenderer.getWidth(commandPrefix);
-        context.drawText(this.textRenderer, commandPrefix, x, y + 1, Color.GRAY.getRGB(), false);
+        this.textRenderer.draw(matrices, commandPrefix, x, y + 1, Color.GRAY.getRGB());
 
         final String score = String.valueOf(this.score);
         final int scoreWidth = this.textRenderer.getWidth(score);
@@ -54,23 +54,21 @@ public class ResultEntry extends AlwaysSelectedEntryListWidget.Entry<ResultEntry
         if (truncated) {
             commandPreview = commandPreview.substring(0, commandPreview.length() - 3) + "...";
         }
-        context.drawText(
-                this.textRenderer,
+        this.textRenderer.drawWithShadow(
+                matrices,
                 commandPreview,
                 x + commandPrefixWidth,
                 y + 1,
-                this.command.type().getRgb(),
-                true
+                this.command.type().getRgb()
         );
 
         if (FuzzyClient.getConfig().showScore() && this.score > 10) {
-            context.drawText(
-                    this.textRenderer,
+            this.textRenderer.drawWithShadow(
+                    matrices,
                     score,
                     x + entryWidth - scoreWidth - 4,
                     y + 1,
-                    scoreColor.getRGB(),
-                    true
+                    scoreColor.getRGB()
             );
         }
     }
