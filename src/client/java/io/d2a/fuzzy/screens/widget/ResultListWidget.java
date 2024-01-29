@@ -1,9 +1,9 @@
 package io.d2a.fuzzy.screens.widget;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -26,21 +26,20 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
     }
 
     @Override
-    public void render(final DrawContext context, final int mouseX, final int mouseY, final float delta) {
+    public void render(final MatrixStack matrices, final int mouseX, final int mouseY, final float delta) {
         // display "no previous commands found"
         if (this.children().size() == 0) {
             final Text text = Text.translatable("text.fuzzy.no-commands-found");
-            context.drawText(
-                    this.client.textRenderer,
+            this.client.textRenderer.drawWithShadow(
+                    matrices,
                     text,
                     this.left + this.width / 2 - this.client.textRenderer.getWidth(text) / 2,
                     this.top + this.height / 2 - 5,
-                    Color.PINK.getRGB(),
-                    true
+                    Color.PINK.getRGB()
             );
             return;
         }
-        super.render(context, mouseX, mouseY, delta);
+        super.render(matrices, mouseX, mouseY, delta);
     }
 
     @Override

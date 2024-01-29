@@ -1,7 +1,7 @@
 package io.d2a.fuzzy.util.text;
 
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -20,7 +20,7 @@ public class TextMerge {
         return new TextMerge(Arrays.asList(texts));
     }
 
-    public void drawCentered(final TextRenderer textRenderer, final DrawContext context, final int x, final int y) {
+    public void drawCentered(final TextRenderer textRenderer, final MatrixStack matrices, final int x, final int y) {
         // get sum of widths
         int fullWidth = 0;
         for (final Text text : this.textList) {
@@ -35,13 +35,12 @@ public class TextMerge {
             } else {
                 color = Color.WHITE.getRGB();
             }
-            context.drawText(
-                    textRenderer,
+            textRenderer.drawWithShadow(
+                    matrices,
                     text,
                     lastX,
                     y,
-                    color,
-                    true
+                    color
             );
             lastX += textRenderer.getWidth(text);
         }

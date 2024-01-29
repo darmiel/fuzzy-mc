@@ -15,13 +15,14 @@ import me.xdrop.fuzzywuzzy.FuzzySearch;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.navigation.GuiNavigation;
 import net.minecraft.client.gui.navigation.GuiNavigationPath;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
@@ -94,6 +95,7 @@ public class FuzzyCommandScreen extends Screen {
                 resultBoxY + resultBoxHeight
         );
         resultListWidget.setRenderBackground(false);
+        resultListWidget.setRenderHorizontalShadows(false);
         resultListWidget.setLeftPos(resultBoxX);
         super.addDrawableChild(resultListWidget);
 
@@ -151,7 +153,9 @@ public class FuzzyCommandScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        renderBackground(matrices);
+
         final int resultBoxWidth = Math.min(super.width / 2, 500);
         final int resultBoxHeight = Math.min(super.height / 2, 300);
 
@@ -161,12 +165,13 @@ public class FuzzyCommandScreen extends Screen {
         final int searchFieldY = resultBoxY + resultBoxHeight + padding;
 
         // draw background
-        context.fill(
+        DrawableHelper.fill(
+                matrices,
                 resultBoxX - padding,
                 resultBoxY - padding,
                 resultBoxX + resultBoxWidth + padding,
                 searchFieldY + searchFieldHeight + padding,
-                Color.BLACK.getRGB()
+                0xFF101010
         );
 
         TextMerge.of(
@@ -179,7 +184,7 @@ public class FuzzyCommandScreen extends Screen {
                 ColoredText.ofString("]: ", Color.GRAY),
                 ColoredText.ofTranslatable("text.fuzzy.action.suggest", Color.LIGHT_GRAY)
         ).drawCentered(
-                super.textRenderer, context, super.width / 2, searchFieldY + searchFieldHeight + 2 * padding
+                super.textRenderer, matrices, super.width / 2, searchFieldY + searchFieldHeight + 2 * padding
         );
 
         if (FuzzyClient.getConfig().enableShiftActions() && this.searchFieldWidget.isShiftDown()) {
@@ -188,30 +193,28 @@ public class FuzzyCommandScreen extends Screen {
 
             for (final ShiftAction action : ShiftAction.SHIFT_ACTIONS) {
                 final Text keyText = Text.of("[" + action.key() + "]: ");
-                context.drawText(
-                        super.textRenderer,
+                super.textRenderer.drawWithShadow(
+                        matrices,
                         keyText,
                         this.padding,
                         lastTextY,
-                        Color.YELLOW.getRGB(),
-                        true
+                        Color.YELLOW.getRGB()
                 );
 
                 final Text description = Text.translatable("text.fuzzy.action." + action.getClass().getSimpleName());
-                context.drawText(
-                        super.textRenderer,
+                super.textRenderer.drawWithShadow(
+                        matrices,
                         description,
                         this.padding + super.textRenderer.getWidth(keyText),
                         lastTextY,
-                        Color.WHITE.getRGB(),
-                        true
+                        Color.WHITE.getRGB()
                 );
 
                 lastTextY += super.textRenderer.fontHeight + 2;
             }
         }
 
-        super.render(context, mouseX, mouseY, delta);
+        super.render(matrices, mouseX, mouseY, delta);
     }
 
     public void updateResults() {
