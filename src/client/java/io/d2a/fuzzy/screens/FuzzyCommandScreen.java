@@ -19,10 +19,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.navigation.GuiNavigation;
 import net.minecraft.client.gui.navigation.GuiNavigationPath;
+import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
@@ -44,6 +46,7 @@ public class FuzzyCommandScreen extends Screen {
     }
 
     private String previousSearch = null;
+    private long lastClickTime;
 
     private SearchTextFieldWidget searchFieldWidget;
     private ResultListWidget resultListWidget;
@@ -301,6 +304,36 @@ public class FuzzyCommandScreen extends Screen {
             final ChatScreen chatScreen = new ChatScreen(Command.Type.CHAT.transform(entry.toString()));
             client.setScreen(chatScreen);
         }, false);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        long timeMs = Util.getMeasuringTimeMs();
+        if (timeMs - this.lastClickTime <= 500L) {
+            if (button == 0) {
+                this.execute();
+            } else if (button == 1) {
+                this.suggest();
+            }
+            return true;
+        }
+
+		this.lastClickTime = timeMs;
+		return super.mouseClicked(mouseX, mouseY, button);
+	}
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (hasControlDown()) {
+            if (verticalAmount > 0) {
+                resultListWidget.selectNextEntryInDirection(NavigationDirection.UP);
+            } else {
+                resultListWidget.selectNextEntryInDirection(NavigationDirection.DOWN);
+            }
+            return true;
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Nullable
