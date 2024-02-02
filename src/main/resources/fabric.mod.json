@@ -7,6 +7,9 @@
 	"authors": [
 		"d2aniel"
 	],
+	"contributors": [
+		"VelizarBG"
+	],
 	"contact": {
 		"homepage": "https://github.com/darmiel",
 		"sources": "https://github.com/darmiel/fuzzy-mc"
@@ -34,7 +37,7 @@
 	],
 	"depends": {
 		"fabricloader": ">=0.14.24",
-		"minecraft": "~1.20.2",
+		"minecraft": "~1.20.3",
 		"java": ">=17",
 		"fabric-api": "*"
 	},
