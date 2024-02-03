@@ -166,7 +166,7 @@ public class FuzzyCommandScreen extends Screen {
                 resultBoxY - padding,
                 resultBoxX + resultBoxWidth + padding,
                 searchFieldY + searchFieldHeight + padding,
-                Color.BLACK.getRGB()
+                0xFF101010
         );
 
         TextMerge.of(
