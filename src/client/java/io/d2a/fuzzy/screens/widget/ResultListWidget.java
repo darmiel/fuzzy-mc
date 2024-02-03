@@ -5,6 +5,7 @@ import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.widget.AlwaysSelectedEntryListWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 
@@ -40,6 +41,29 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
             return;
         }
         super.render(matrices, mouseX, mouseY, delta);
+    }
+
+    public int getEntryY(final double mouseY) {
+        return MathHelper.floor(mouseY - this.top)
+                - this.headerHeight + (int) this.getScrollAmount() - 2;
+    }
+
+    public int getEntryHeight() {
+        return this.itemHeight;
+    }
+
+    public ResultEntry at(final int n) {
+        if (n < 0 || n >= this.children().size()) {
+            return null;
+        }
+        return this.children().get(n);
+    }
+
+    public boolean isMouseOver(final double mouseX, final double mouseY) {
+        return mouseX >= (double) this.left
+                && mouseX <= (double) this.right
+                && mouseY >= (double) this.top
+                && mouseY <= (double) this.bottom;
     }
 
     @Override
