@@ -7,6 +7,9 @@
 	"authors": [
 		"d2aniel"
 	],
+	"contributors": [
+		"VelizarBG"
+	],
 	"contact": {
 		"homepage": "https://github.com/darmiel",
 		"sources": "https://github.com/darmiel/fuzzy-mc"
