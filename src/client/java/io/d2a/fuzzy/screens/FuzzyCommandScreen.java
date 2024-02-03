@@ -19,10 +19,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.navigation.GuiNavigation;
 import net.minecraft.client.gui.navigation.GuiNavigationPath;
+import net.minecraft.client.gui.navigation.NavigationDirection;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
+import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
@@ -44,6 +46,10 @@ public class FuzzyCommandScreen extends Screen {
     }
 
     private String previousSearch = null;
+
+    private long lastClickTime;
+    private Command lastClickCommand;
+
 
     private SearchTextFieldWidget searchFieldWidget;
     private ResultListWidget resultListWidget;
@@ -301,6 +307,68 @@ public class FuzzyCommandScreen extends Screen {
             final ChatScreen chatScreen = new ChatScreen(Command.Type.CHAT.transform(entry.toString()));
             client.setScreen(chatScreen);
         }, false);
+    }
+
+    private void selectEntry(final ResultEntry entry) {
+        this.resultListWidget.setSelected(entry);
+        if (!entry.getCommand().equals(this.lastClickCommand)) {
+            this.lastClickCommand = null;
+        }
+    }
+
+    private boolean onResultListClicked(final double mouseY, final int button) {
+        // click selection
+        final int entryY = this.resultListWidget.getEntryY(mouseY);
+        if (entryY >= 0) {
+            final int entryIndex = entryY / this.resultListWidget.getEntryHeight();
+            final ResultEntry entry = this.resultListWidget.at(entryIndex);
+            if (entry != null) {
+                this.selectEntry(entry);
+            }
+        }
+
+        // double click
+        final ResultEntry selectedEntry = this.resultListWidget.getSelectedOrNull();
+        if (selectedEntry != null) {
+            final long timeMs = Util.getMeasuringTimeMs();
+            if (timeMs - this.lastClickTime <= 350
+                    && this.lastClickCommand != null
+                    && this.lastClickCommand.equals(selectedEntry.getCommand())) {
+                if (button == 0) {
+                    this.execute();
+                } else if (button == 1) {
+                    this.suggest();
+                }
+                return true;
+            }
+
+            this.lastClickTime = timeMs;
+            this.lastClickCommand = selectedEntry.getCommand();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (this.resultListWidget.isMouseOver(mouseX, mouseY)
+                && this.onResultListClicked(mouseY, button)) {
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (hasControlDown()) {
+            if (verticalAmount > 0) {
+                resultListWidget.selectNextEntryInDirection(NavigationDirection.UP);
+            } else {
+                resultListWidget.selectNextEntryInDirection(NavigationDirection.DOWN);
+            }
+            return true;
+        }
+
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Nullable
