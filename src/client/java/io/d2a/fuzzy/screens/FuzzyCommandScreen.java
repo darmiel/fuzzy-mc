@@ -361,9 +361,9 @@ public class FuzzyCommandScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
         if (hasControlDown()) {
-            if (verticalAmount > 0) {
+            if (amount > 0) {
                 resultListWidget.selectNextEntryInDirection(NavigationDirection.UP);
             } else {
                 resultListWidget.selectNextEntryInDirection(NavigationDirection.DOWN);
@@ -371,7 +371,7 @@ public class FuzzyCommandScreen extends Screen {
             return true;
         }
 
-        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        return super.mouseScrolled(mouseX, mouseY, amount);
     }
 
     @Nullable
