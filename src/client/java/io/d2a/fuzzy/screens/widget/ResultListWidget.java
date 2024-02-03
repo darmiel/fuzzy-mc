@@ -46,7 +46,7 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
 
     public int getEntryY(final double mouseY) {
         return MathHelper.floor(mouseY - this.top)
-                - this.headerHeight + (int) this.getScrollAmount() - 4;
+                - this.headerHeight + (int) this.getScrollAmount() - 2;
     }
 
     public int getEntryHeight() {

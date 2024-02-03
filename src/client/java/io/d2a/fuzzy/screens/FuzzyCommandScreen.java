@@ -319,7 +319,7 @@ public class FuzzyCommandScreen extends Screen {
     private boolean onResultListClicked(final double mouseY, final int button) {
         // click selection
         final int entryY = this.resultListWidget.getEntryY(mouseY);
-        if (entryY > 0) {
+        if (entryY >= 0) {
             final int entryIndex = entryY / this.resultListWidget.getEntryHeight();
             final ResultEntry entry = this.resultListWidget.at(entryIndex);
             if (entry != null) {
