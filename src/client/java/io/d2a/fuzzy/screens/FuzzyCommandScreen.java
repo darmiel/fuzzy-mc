@@ -96,11 +96,10 @@ public class FuzzyCommandScreen extends Screen {
                 super.client,
                 resultBoxWidth,
                 resultBoxHeight,
-                resultBoxY,
-                resultBoxY + resultBoxHeight
+                resultBoxY
         );
         resultListWidget.setRenderBackground(false);
-        resultListWidget.setLeftPos(resultBoxX);
+        resultListWidget.setX(resultBoxX);
         super.addDrawableChild(resultListWidget);
 
         // call search to initially fill all commands

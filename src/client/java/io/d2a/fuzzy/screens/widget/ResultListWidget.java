@@ -14,9 +14,8 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
     public ResultListWidget(final MinecraftClient minecraftClient,
                             final int width,
                             final int height,
-                            final int top,
-                            final int bottom) {
-        super(minecraftClient, width, height, top, bottom, 15);
+                            final int y) {
+        super(minecraftClient, width, height, y, 15);
     }
 
     public void selectNextEntryInDirection(final NavigationDirection direction) {
@@ -27,21 +26,21 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
     }
 
     @Override
-    public void render(final DrawContext context, final int mouseX, final int mouseY, final float delta) {
+    public void renderWidget(final DrawContext context, final int mouseX, final int mouseY, final float delta) {
         // display "no previous commands found"
         if (this.children().size() == 0) {
             final Text text = Text.translatable("text.fuzzy.no-commands-found");
             context.drawText(
                     this.client.textRenderer,
                     text,
-                    this.left + this.width / 2 - this.client.textRenderer.getWidth(text) / 2,
-                    this.top + this.height / 2 - 5,
+                    this.getX() + this.width / 2 - this.client.textRenderer.getWidth(text) / 2,
+                    this.getY() + this.height / 2 - 5,
                     Color.PINK.getRGB(),
                     true
             );
             return;
         }
-        super.render(context, mouseX, mouseY, delta);
+        super.renderWidget(context, mouseX, mouseY, delta);
     }
 
     public int getEntryY(final double mouseY) {
