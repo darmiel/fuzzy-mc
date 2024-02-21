@@ -28,7 +28,7 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
     @Override
     public void renderWidget(final DrawContext context, final int mouseX, final int mouseY, final float delta) {
         // display "no previous commands found"
-        if (this.children().size() == 0) {
+        if (this.children().isEmpty()) {
             final Text text = Text.translatable("text.fuzzy.no-commands-found");
             context.drawText(
                     this.client.textRenderer,
@@ -44,7 +44,7 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
     }
 
     public int getEntryY(final double mouseY) {
-        return MathHelper.floor(mouseY - this.top)
+        return MathHelper.floor(mouseY - this.getY())
                 - this.headerHeight + (int) this.getScrollAmount() - 2;
     }
 
@@ -60,10 +60,10 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
     }
 
     public boolean isMouseOver(final double mouseX, final double mouseY) {
-        return mouseX >= (double) this.left
-                && mouseX <= (double) this.right
-                && mouseY >= (double) this.top
-                && mouseY <= (double) this.bottom;
+        return mouseX >= this.getX()
+                && mouseX <= this.getX() + this.width
+                && mouseY >= this.getY()
+                && mouseY <= this.getY() + this.height;
     }
 
     @Override
