@@ -8,10 +8,13 @@ import io.d2a.fuzzy.util.Command;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 import java.awt.*;
 
@@ -38,7 +41,7 @@ public class GiveCommandBlockShiftAction implements ShiftAction {
             FuzzyClient.sendMessage(
                     client.player,
                     Text.translatable("text.fuzzy.error.not-creative")
-                            .styled(style -> style.withColor(Color.RED.getRGB()))
+                            .styled(style -> style.withColor(Formatting.RED))
             );
             return false;
         }
@@ -49,7 +52,7 @@ public class GiveCommandBlockShiftAction implements ShiftAction {
         compound.putString("Command", Command.Type.COMMAND_BLOCK.transform(entry.getCommand().command()));
         NbtCompound blockEntityTag = new NbtCompound();
         blockEntityTag.put("BlockEntityTag", compound);
-        stack.setNbt(blockEntityTag);
+        stack.set(DataComponentTypes.BLOCK_ENTITY_DATA, NbtComponent.of(blockEntityTag));
 
         final int slot = client.player.getInventory().selectedSlot;
         networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + slot, stack));

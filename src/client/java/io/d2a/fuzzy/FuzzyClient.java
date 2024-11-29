@@ -109,7 +109,7 @@ public class FuzzyClient implements ClientModInitializer {
         for (final Text text : texts) {
             prefix = prefix.append(text);
         }
-        client.sendMessage(prefix);
+        client.sendMessage(prefix, false);
     }
 
 }
