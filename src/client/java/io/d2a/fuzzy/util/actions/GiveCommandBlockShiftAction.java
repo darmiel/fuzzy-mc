@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.awt.*;
 
@@ -41,7 +40,7 @@ public class GiveCommandBlockShiftAction implements ShiftAction {
             FuzzyClient.sendMessage(
                     client.player,
                     Text.translatable("text.fuzzy.error.not-creative")
-                            .styled(style -> style.withColor(Formatting.RED))
+                            .styled(style -> style.withColor(Color.RED.getRGB()))
             );
             return false;
         }
