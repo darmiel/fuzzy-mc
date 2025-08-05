@@ -88,7 +88,7 @@ public class FuzzyCommandScreen extends Screen {
                 case SUGGEST -> this.suggest();
             }
         });
-        this.focusOn(this.searchFieldWidget);
+        this.setFocused(this.searchFieldWidget);
         super.addDrawableChild(this.searchFieldWidget);
 
         // command list widget
@@ -98,7 +98,7 @@ public class FuzzyCommandScreen extends Screen {
                 resultBoxHeight,
                 resultBoxY
         );
-        resultListWidget.setRenderBackground(false);
+//        resultListWidget.setRenderBackground(false);
         resultListWidget.setX(resultBoxX);
         super.addDrawableChild(resultListWidget);
 

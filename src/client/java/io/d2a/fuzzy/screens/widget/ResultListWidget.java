@@ -72,7 +72,7 @@ public class ResultListWidget extends AlwaysSelectedEntryListWidget<ResultEntry>
     }
 
     @Override
-    protected int getScrollbarPositionX() {
+    protected int getScrollbarX() {
         return -10;
     }
 

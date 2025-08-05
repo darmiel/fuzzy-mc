@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.5.7'
+	id 'fabric-loom' version '1.11-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -51,7 +51,7 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
-	modApi "com.terraformersmc:modmenu:9.0.0"
+	modApi "com.terraformersmc:modmenu:11.0.3"
 
 	implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 	include 'me.xdrop:fuzzywuzzy:1.4.0'
@@ -66,7 +66,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+	it.options.release = 21
 }
 
 java {
@@ -75,13 +75,13 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${inputs.properties.archivesName}"}
 	}
 }
 

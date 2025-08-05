@@ -6,6 +6,7 @@ import io.d2a.fuzzy.screens.widget.ResultEntry;
 import io.d2a.fuzzy.screens.widget.SearchTextFieldWidget;
 import io.d2a.fuzzy.util.Command;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CommandBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.item.ItemStack;
@@ -49,7 +50,7 @@ public class GiveCommandBlockShiftAction implements ShiftAction {
         compound.putString("Command", Command.Type.COMMAND_BLOCK.transform(entry.getCommand().command()));
         NbtCompound blockEntityTag = new NbtCompound();
         blockEntityTag.put("BlockEntityTag", compound);
-        stack.setNbt(blockEntityTag);
+//        stack.setNbt(blockEntityTag);
 
         final int slot = client.player.getInventory().selectedSlot;
         networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + slot, stack));
