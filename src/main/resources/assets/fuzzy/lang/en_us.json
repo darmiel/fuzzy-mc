@@ -34,5 +34,5 @@
   "text.fuzzy.action.suggest": "Suggest Command",
   "text.fuzzy.messages.command-copied": "Copied: ",
   "text.fuzzy.error.not-creative": "You must be in creative mode to use this feature.",
-  "text.fuzzy.messages.command-block-given": "Command Block given."
+  "text.fuzzy.messages.command-block-command-sent": "Command sent to retrieve command block. This may fail on some servers."
 }

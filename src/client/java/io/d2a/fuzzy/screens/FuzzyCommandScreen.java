@@ -88,7 +88,7 @@ public class FuzzyCommandScreen extends Screen {
                 case SUGGEST -> this.suggest();
             }
         });
-        this.focusOn(this.searchFieldWidget);
+        this.setFocused(this.searchFieldWidget);
         super.addDrawableChild(this.searchFieldWidget);
 
         // command list widget
@@ -98,7 +98,6 @@ public class FuzzyCommandScreen extends Screen {
                 resultBoxHeight,
                 resultBoxY
         );
-        resultListWidget.setRenderBackground(false);
         resultListWidget.setX(resultBoxX);
         super.addDrawableChild(resultListWidget);
 
@@ -238,7 +237,7 @@ public class FuzzyCommandScreen extends Screen {
         this.resultListWidget.children().clear();
 
         // fuzzy search in commands
-        if (text.length() > 0) {
+        if (!text.isEmpty()) {
             FuzzySearch.extractTop(
                             text,
                             FuzzyClient.SENT_COMMANDS,
@@ -256,7 +255,7 @@ public class FuzzyCommandScreen extends Screen {
         } else {
             FuzzyClient.SENT_COMMANDS
                     .forEach(command ->
-                            resultListWidget.children().add(0, new ResultEntry(
+                            resultListWidget.children().addFirst(new ResultEntry(
                                     super.textRenderer,
                                     command,
                                     -1
@@ -265,14 +264,14 @@ public class FuzzyCommandScreen extends Screen {
         }
 
         // select first children
-        if (resultListWidget.children().size() > 0) {
-            resultListWidget.setSelected(resultListWidget.children().get(0));
+        if (!resultListWidget.children().isEmpty()) {
+            resultListWidget.setSelected(resultListWidget.children().getFirst());
         } else {
             resultListWidget.setSelected(null);
         }
 
         // reset scroll position
-        resultListWidget.setScrollAmount(0);
+        resultListWidget.setScrollY(0);
     }
 
     private void check(final BiConsumer<MinecraftClient, ResultEntry> entryConsumer) {

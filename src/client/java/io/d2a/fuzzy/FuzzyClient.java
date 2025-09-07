@@ -92,7 +92,7 @@ public class FuzzyClient implements ClientModInitializer {
         // ignore commands with ignored prefixes
         final String commandCompare = commandText.toLowerCase().trim();
         if (FuzzyClient.getConfig().ignoredCommandPrefixes() != null &&
-                FuzzyClient.getConfig().ignoredCommandPrefixes().length() > 0 &&
+                !FuzzyClient.getConfig().ignoredCommandPrefixes().isEmpty() &&
                 Stream.of(FuzzyClient.getConfig().ignoredCommandPrefixes().split(","))
                         .map(String::toLowerCase)
                         .anyMatch(commandCompare::startsWith)) {
@@ -109,7 +109,7 @@ public class FuzzyClient implements ClientModInitializer {
         for (final Text text : texts) {
             prefix = prefix.append(text);
         }
-        client.sendMessage(prefix);
+        client.sendMessage(prefix, true);
     }
 
 }
