@@ -5,12 +5,9 @@ import io.d2a.fuzzy.screens.FuzzyCommandScreen;
 import io.d2a.fuzzy.screens.widget.ResultEntry;
 import io.d2a.fuzzy.screens.widget.SearchTextFieldWidget;
 import io.d2a.fuzzy.util.Command;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.c2s.play.CreativeInventoryActionC2SPacket;
 import net.minecraft.text.Text;
 
 import java.awt.*;
@@ -44,19 +41,16 @@ public class GiveCommandBlockShiftAction implements ShiftAction {
         }
 
         // build command block item stack
-        final ItemStack stack = new ItemStack(Blocks.COMMAND_BLOCK, 1);
         final NbtCompound compound = new NbtCompound();
+        compound.putString("id", "minecraft:command_block");
         compound.putString("Command", Command.Type.COMMAND_BLOCK.transform(entry.getCommand().command()));
-        NbtCompound blockEntityTag = new NbtCompound();
-        blockEntityTag.put("BlockEntityTag", compound);
-        stack.setNbt(blockEntityTag);
 
-        final int slot = client.player.getInventory().selectedSlot;
-        networkHandler.sendPacket(new CreativeInventoryActionC2SPacket(36 + slot, stack));
+        final String command = "give @s minecraft:command_block[minecraft:block_entity_data=" + compound + "] 1";
+        networkHandler.sendChatCommand(command);
 
         FuzzyClient.sendMessage(
                 client.player,
-                Text.translatable("text.fuzzy.messages.command-block-given")
+                Text.translatable("text.fuzzy.messages.command-block-command-sent")
                         .styled(style -> style.withColor(Color.WHITE.getRGB()))
         );
         return false;
